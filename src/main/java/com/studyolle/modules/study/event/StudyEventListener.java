@@ -36,11 +36,12 @@ public class StudyEventListener {
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
     private final NotificationRepository notificationRepository;
+    private final AccountPredicates accountPredicates;
 
     @EventListener
     public void handleStudyCreatedEvent(StudyCreatedEvent studyCreatedEvent) {
         Study study = studyRepository.findStudyWithTagsAndZonesById(studyCreatedEvent.getStudy().getId());
-        Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByTagsAndZones(study.getTags(), study.getZones()));
+        Iterable<Account> accounts = accountRepository.findAll(accountPredicates.findByTagsAndZones(study.getTags(), study.getZones()));
         accounts.forEach(account -> {
             if (account.isStudyCreatedByEmail()) {
                 sendStudyCreatedEmail(study, account);
@@ -57,7 +58,7 @@ public class StudyEventListener {
         notification.setTitle(study.getTitle());
         notification.setLink("/study/" + study.getEncodedPath());
         notification.setChecked(false);
-        notification.setCreatedLocalDateTime(LocalDateTime.now());
+        notification.setCreatedDateTime(LocalDateTime.now());
         notification.setMessage(study.getShortDescription());
         notification.setAccount(account);
         notification.setNotificationType(NotificationType.STUDY_CREATED);
