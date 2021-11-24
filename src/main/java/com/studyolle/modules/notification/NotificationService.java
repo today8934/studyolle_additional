@@ -9,7 +9,7 @@ import java.util.List;
 @Transactional
 public class NotificationService {
 
-    public void checked(List<Notification> newStudyNotifications) {
-        newStudyNotifications.stream().forEach(noti -> noti.setChecked(true));
+    public void markAsRead(List<Notification> notifications) {
+        notifications.stream().forEach(noti -> noti.setChecked(true));
     }
 }
