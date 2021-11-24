@@ -81,4 +81,10 @@ public class StudyController {
         return "redirect:/study/" + study.getEncodedPath() + "/members";
     }
 
+
+    @GetMapping("/study/data")
+    public String generateTestData(@CurrentAccount Account account) {
+        studyService.generateTestStudies(account);
+        return "redirect:/";
+    }
 }
